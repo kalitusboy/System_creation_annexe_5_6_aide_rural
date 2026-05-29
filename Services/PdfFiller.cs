@@ -113,7 +113,7 @@ public class PdfFiller
                 catch { }
             }
         }
-        if (count > 0) Log($"{count}× "{name}" = {value}");
+        if (count > 0) Log($"{count}× \"{name}\" = {value}");
         else Log($"حقل غير موجود: {name}", true);
     }
 

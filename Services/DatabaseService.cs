@@ -67,15 +67,11 @@ public class DatabaseService
         var list = new List<Beneficiaire>();
         using var conn = new SqliteConnection(_connectionString);
         conn.Open();
-        string sql = "SELECT * FROM Beneficiaires WHERE 1=0";
-        if (!string.IsNullOrWhiteSpace(term))
-        {
-            sql = "SELECT * FROM Beneficiaires WHERE NomPrenom LIKE @term OR Code LIKE @term OR substr(Code, -5) = @last5 ORDER BY NomPrenom";
-        }
-        else
-        {
+        string sql;
+        if (string.IsNullOrWhiteSpace(term))
             sql = "SELECT * FROM Beneficiaires ORDER BY NomPrenom";
-        }
+        else
+            sql = "SELECT * FROM Beneficiaires WHERE NomPrenom LIKE @term OR Code LIKE @term OR substr(Code, -5) = @last5 ORDER BY NomPrenom";
         using var cmd = new SqliteCommand(sql, conn);
         if (!string.IsNullOrWhiteSpace(term))
         {
@@ -115,7 +111,9 @@ public class DatabaseService
             cmd.Parameters.AddWithValue("@created", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
             cmd.Parameters.AddWithValue("@updated", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
             cmd.ExecuteNonQuery();
-            b.Id = (int)conn.LastInsertRowId;
+            // الحصول على Id المدرج
+            cmd.CommandText = "SELECT last_insert_rowid()";
+            b.Id = Convert.ToInt32(cmd.ExecuteScalar());
         }
         else
         {

@@ -2,7 +2,7 @@ name: HabitatRural v3 – Build & Release
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [ "Version_claude", "master" ]
   workflow_dispatch:
 
 jobs:

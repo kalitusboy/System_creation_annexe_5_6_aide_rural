@@ -1,0 +1,424 @@
+<Window x:Class="HabitatRural.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="نظام ملاحق الإعانة الريفية – Annexes 05 &amp; 06"
+        Height="820" Width="1280"
+        MinHeight="700" MinWidth="1100"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BgBrush}"
+        FlowDirection="RightToLeft"
+        FontFamily="{StaticResource UiFont}">
+
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{StaticResource UiFont}"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="18">
+        <Border Style="{StaticResource MainCard}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- ════════════════════ Header ════════════════════ -->
+                <Border Grid.Row="0" Background="{StaticResource HeaderGradient}"
+                        CornerRadius="22,22,0,0" Padding="24,16">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="📋" FontSize="26" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="نظام ملاحق المساعدة الريفية"
+                                           Foreground="White" FontSize="18" FontWeight="Bold"/>
+                                <TextBlock Text="Annexes 05 &amp; 06 — حقن مباشر في القوالب الرسمية"
+                                           Foreground="#FF90CAF9" FontSize="11" Margin="0,2,0,0"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Button Content="👥  المستفيدون" Style="{StaticResource HeaderIconButton}"
+                                    Click="BtnBeneficiaires_Click" Margin="0,0,6,0"/>
+                            <Button Content="⚙  الإعدادات العامة" Style="{StaticResource HeaderIconButton}"
+                                    Click="BtnSettings_Click" Margin="0,0,6,0"/>
+                            <Button Content="ℹ  حول البرنامج" Style="{StaticResource HeaderIconButton}"
+                                    Click="BtnAbout_Click"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- ════════════════════ Content ════════════════════ -->
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled" Padding="24,20">
+                    <StackPanel>
+
+                        <!-- لوحة المنطق -->
+                        <Border Style="{StaticResource LogicPanel}">
+                            <StackPanel>
+                                <Border Background="White" CornerRadius="10" Padding="14,10"
+                                        BorderBrush="{StaticResource AccentBrush}" BorderThickness="0,0,4,0"
+                                        Margin="0,0,0,12">
+                                    <TextBlock x:Name="TxtLogicSummary"
+                                               Text="— سيتم التحديث —"
+                                               FontSize="13" FontWeight="SemiBold"
+                                               Foreground="#FF1E3A8A"
+                                               TextWrapping="Wrap"/>
+                                </Border>
+
+                                <WrapPanel Margin="0,0,0,8">
+                                    <TextBlock Text="🪙 الشطر:" FontWeight="Bold" FontSize="12"
+                                               Foreground="#FF1E3A8A" VerticalAlignment="Center"
+                                               Margin="0,0,12,0"/>
+                                    <RadioButton x:Name="RbT1"  GroupName="tranche" IsChecked="True"
+                                                 Style="{StaticResource PillRadio}"
+                                                 Checked="Logic_Changed">
+                                        <TextBlock Text="الشطر الأول فقط"/>
+                                    </RadioButton>
+                                    <RadioButton x:Name="RbT2"  GroupName="tranche"
+                                                 Style="{StaticResource PillRadio}"
+                                                 Checked="Logic_Changed">
+                                        <TextBlock Text="الشطر الثاني فقط"/>
+                                    </RadioButton>
+                                    <RadioButton x:Name="RbBoth" GroupName="tranche"
+                                                 Style="{StaticResource PillRadio}"
+                                                 Checked="Logic_Changed">
+                                        <TextBlock Text="الشطرين معاً"/>
+                                    </RadioButton>
+                                </WrapPanel>
+
+                                <WrapPanel>
+                                    <TextBlock Text="🏗 نوع البناء:" FontWeight="Bold" FontSize="12"
+                                               Foreground="#FF1E3A8A" VerticalAlignment="Center"
+                                               Margin="0,0,12,0"/>
+                                    <RadioButton x:Name="RbTalia" GroupName="build" IsChecked="True"
+                                                 Style="{StaticResource PillRadio}"
+                                                 Checked="Logic_Changed">
+                                        <TextBlock Text="تعلية (Surélévation)"/>
+                                    </RadioButton>
+                                    <RadioButton x:Name="RbArdhi" GroupName="build"
+                                                 Style="{StaticResource PillRadio}"
+                                                 Checked="Logic_Changed">
+                                        <TextBlock Text="بناية أرضية"/>
+                                    </RadioButton>
+                                </WrapPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- ════════════════════ البيانات المشتركة ════════════════════ -->
+                        <Border Style="{StaticResource CardBorder}">
+                            <StackPanel>
+                                <DockPanel>
+                                    <TextBlock Style="{StaticResource SectionTitle}"
+                                               Text="👤 بيانات المستفيد المشتركة"/>
+                                    <TextBlock Text="(تُستخدم في كلا الملحقين)"
+                                               FontSize="11" Foreground="{StaticResource TextSecondaryBrush}"
+                                               VerticalAlignment="Center" Margin="10,0,0,12"/>
+                                </DockPanel>
+
+                                <DockPanel Margin="0,0,0,10">
+                                    <ComboBox x:Name="CbExistingBeneficiaires"
+                                              Style="{StaticResource ModernComboBox}"
+                                              Width="320"
+                                              SelectionChanged="CbExistingBeneficiaires_SelectionChanged"
+                                              DockPanel.Dock="Right" Margin="0,0,8,0"/>
+                                    <Button Content="💾 حفظ كمستفيد"
+                                            Style="{StaticResource SmallButton}"
+                                            Background="{StaticResource AccentBrush}"
+                                            Click="BtnSaveBeneficiaire_Click"
+                                            Margin="0,0,8,0"/>
+                                    <Button Content="🗑 حذف المحدد"
+                                            Style="{StaticResource SmallButton}"
+                                            Background="{StaticResource DangerBrush}"
+                                            Click="BtnDeleteBeneficiaire_Click"/>
+                                    <TextBlock Text="📂 المستفيدون المحفوظون: "
+                                               FontWeight="SemiBold" FontSize="12"
+                                               Foreground="{StaticResource LabelBrush}"
+                                               VerticalAlignment="Center"/>
+                                </DockPanel>
+
+                                <UniformGrid Columns="3" Margin="0,0,0,0">
+                                    <StackPanel Margin="0,0,8,12">
+                                        <TextBlock Style="{StaticResource FieldLabel}">
+                                            <Run Text="🔢 رقم المقرر (Code) "/>
+                                            <Run Text="*" Foreground="{StaticResource DangerBrush}" FontWeight="Bold"/>
+                                        </TextBlock>
+                                        <TextBox x:Name="TxtCode" Style="{StaticResource ModernTextBox}"
+                                                 Text="10261531723003263"
+                                                 TextChanged="TxtCode_TextChanged"/>
+                                    </StackPanel>
+
+                                    <StackPanel Margin="4,0,4,12">
+                                        <TextBlock Style="{StaticResource FieldLabel}">
+                                            <Run Text="👤 الاسم واللقب "/>
+                                            <Run Text="*" Foreground="{StaticResource DangerBrush}" FontWeight="Bold"/>
+                                        </TextBlock>
+                                        <TextBox x:Name="TxtNomPrenom" Style="{StaticResource ModernTextBox}"
+                                                 Text="BOUAZZA MOHAMED"/>
+                                    </StackPanel>
+
+                                    <StackPanel Margin="8,0,0,12">
+                                        <TextBlock Style="{StaticResource FieldLabel}">
+                                            <Run Text="🏠 الفرقة/العنوان "/>
+                                            <Run Text="*" Foreground="{StaticResource DangerBrush}" FontWeight="Bold"/>
+                                        </TextBlock>
+                                        <TextBox x:Name="TxtAdresse" Style="{StaticResource ModernTextBox}"
+                                                 Text="Fraction Ouled Sidi Yahia"/>
+                                    </StackPanel>
+
+                                    <StackPanel Margin="0,0,8,0">
+                                        <TextBlock Style="{StaticResource FieldLabel}">
+                                            <Run Text="📅 تاريخ القرار (Date décision) "/>
+                                            <Run Text="*" Foreground="{StaticResource DangerBrush}" FontWeight="Bold"/>
+                                        </TextBlock>
+                                        <DatePicker x:Name="DpDateDecision"
+                                                    Style="{StaticResource ModernDatePicker}"
+                                                    SelectedDateFormat="Short"/>
+                                    </StackPanel>
+
+                                    <StackPanel Margin="4,0,4,0">
+                                        <TextBlock Style="{StaticResource FieldLabel}">
+                                            <Run Text="🏦 رقم CCP / حساب بنكي "/>
+                                            <Run Text="*" Foreground="{StaticResource DangerBrush}" FontWeight="Bold"/>
+                                        </TextBlock>
+                                        <TextBox x:Name="TxtCcp" Style="{StaticResource ModernTextBox}"
+                                                 Text="0012345678 90"/>
+                                    </StackPanel>
+
+                                    <StackPanel Margin="8,0,0,0">
+                                        <TextBlock Style="{StaticResource FieldLabel}"
+                                                   Text="🔑 آخر 5 أرقام (تلقائي)"/>
+                                        <TextBox x:Name="TxtLast5" Style="{StaticResource ModernTextBox}"
+                                                 IsReadOnly="True" Background="#FFEEF2F5"/>
+                                    </StackPanel>
+                                </UniformGrid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- ════════════════════ التبويبات ════════════════════ -->
+                        <Border Background="White" CornerRadius="14"
+                                BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                Padding="0" Margin="0,0,0,16">
+                            <TabControl x:Name="TabAnnexes" Background="White" BorderThickness="0"
+                                        Padding="20" SelectionChanged="TabAnnexes_SelectionChanged">
+                                <TabControl.Resources>
+                                    <Style TargetType="TabItem">
+                                        <Setter Property="FontFamily" Value="{StaticResource UiFont}"/>
+                                        <Setter Property="FontSize" Value="13"/>
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                        <Setter Property="Padding" Value="20,10"/>
+                                        <Setter Property="Margin" Value="0,0,6,0"/>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="TabItem">
+                                                    <Border x:Name="Bd" Background="#FFF1F5F9"
+                                                            CornerRadius="20" Padding="{TemplateBinding Padding}">
+                                                        <ContentPresenter x:Name="Cp"
+                                                                          ContentSource="Header"
+                                                                          TextElement.Foreground="#FF64748B"/>
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsSelected" Value="True">
+                                                            <Setter TargetName="Bd" Property="Background"
+                                                                    Value="{StaticResource PrimaryDarkBrush}"/>
+                                                            <Setter TargetName="Cp" Property="TextElement.Foreground"
+                                                                    Value="White"/>
+                                                        </Trigger>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter TargetName="Bd" Property="Background"
+                                                                    Value="#FFE2E8F0"/>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </TabControl.Resources>
+
+                                <!-- ============ Annexe 05 ============ -->
+                                <TabItem Header="📄 الملحق 05 (طلب الدفع)">
+                                    <StackPanel Margin="0,16,0,0">
+                                        <Border Style="{StaticResource InfoBoxGreen}">
+                                            <TextBlock TextWrapping="Wrap" FontSize="12">
+                                                <Run Text="✅ "/>
+                                                <Run Text="معظم الحقول تُعبأ تلقائياً من البيانات المشتركة والإعدادات. "/>
+                                                <Run FontWeight="Bold" Text="تاريخ الطلب فقط "/>
+                                                <Run Text="اختياري ويمكن تركه فارغاً ليُكتب يدوياً على المطبوعة."/>
+                                            </TextBlock>
+                                        </Border>
+
+                                        <UniformGrid Columns="3">
+                                            <StackPanel Margin="0,0,8,0">
+                                                <TextBlock Style="{StaticResource FieldLabel}">
+                                                    <Run Text="📅 تاريخ الطلب (Date demande) "/>
+                                                    <Run Text="[اختياري]" Foreground="{StaticResource SuccessBrush}" FontSize="10"/>
+                                                </TextBlock>
+                                                <DatePicker x:Name="DpDateDemande"
+                                                            Style="{StaticResource ModernDatePicker}"/>
+                                                <Button Content="🚫 ترك فارغاً" Style="{StaticResource SmallButton}"
+                                                        Background="{StaticResource WarnBrush}"
+                                                        HorizontalAlignment="Left" Margin="0,4,0,0"
+                                                        Click="BtnClearDateDemande_Click"/>
+                                            </StackPanel>
+                                        </UniformGrid>
+                                    </StackPanel>
+                                </TabItem>
+
+                                <!-- ============ Annexe 06 ============ -->
+                                <TabItem Header="📑 الملحق 06 (محضر المعاينة)">
+                                    <StackPanel Margin="0,16,0,0">
+                                        <Border Style="{StaticResource InfoBoxBlue}">
+                                            <TextBlock TextWrapping="Wrap" FontSize="12">
+                                                <Run Text="ℹ "/>
+                                                <Run Text="الولاية/الدائرة/البلدية تُسحب من "/>
+                                                <Run FontWeight="Bold" Text="الإعدادات العامة"/>
+                                                <Run Text=". "/>
+                                                <Run FontWeight="Bold" Text="تاريخ المعاينة وتاريخ إعداد المحضر "/>
+                                                <Run Text="اختياريان."/>
+                                            </TextBlock>
+                                        </Border>
+
+                                        <UniformGrid Columns="3">
+                                            <StackPanel Margin="0,0,8,12">
+                                                <TextBlock Style="{StaticResource FieldLabel}">
+                                                    <Run Text="👤 اسم Subdivisionnaire "/>
+                                                    <Run Text="*" Foreground="{StaticResource DangerBrush}" FontWeight="Bold"/>
+                                                </TextBlock>
+                                                <ComboBox x:Name="CbSubdiv"
+                                                          Style="{StaticResource ModernComboBox}"
+                                                          IsEditable="True"/>
+                                            </StackPanel>
+
+                                            <StackPanel Margin="4,0,4,12">
+                                                <TextBlock Style="{StaticResource FieldLabel}">
+                                                    <Run Text="📄 رقم رخصة البناء "/>
+                                                    <Run Text="*" Foreground="{StaticResource DangerBrush}" FontWeight="Bold"/>
+                                                </TextBlock>
+                                                <TextBox x:Name="TxtPermisNum" Style="{StaticResource ModernTextBox}"
+                                                         Text="PC-2025/09"/>
+                                            </StackPanel>
+
+                                            <StackPanel Margin="8,0,0,12">
+                                                <TextBlock Style="{StaticResource FieldLabel}">
+                                                    <Run Text="📆 تاريخ رخصة البناء "/>
+                                                    <Run Text="*" Foreground="{StaticResource DangerBrush}" FontWeight="Bold"/>
+                                                </TextBlock>
+                                                <DatePicker x:Name="DpDatePermis" Style="{StaticResource ModernDatePicker}"/>
+                                            </StackPanel>
+
+                                            <StackPanel Margin="0,0,8,12">
+                                                <TextBlock Style="{StaticResource FieldLabel}">
+                                                    <Run Text="📅 تاريخ المعاينة "/>
+                                                    <Run Text="[اختياري]" Foreground="{StaticResource SuccessBrush}" FontSize="10"/>
+                                                </TextBlock>
+                                                <DatePicker x:Name="DpDateVisite" Style="{StaticResource ModernDatePicker}"/>
+                                                <Button Content="🚫 ترك فارغاً" Style="{StaticResource SmallButton}"
+                                                        Background="{StaticResource WarnBrush}"
+                                                        HorizontalAlignment="Left" Margin="0,4,0,0"
+                                                        Click="BtnClearDateVisite_Click"/>
+                                            </StackPanel>
+
+                                            <StackPanel Margin="4,0,4,12">
+                                                <TextBlock Style="{StaticResource FieldLabel}">
+                                                    <Run Text="📑 تاريخ إعداد المحضر (PV) "/>
+                                                    <Run Text="[اختياري]" Foreground="{StaticResource SuccessBrush}" FontSize="10"/>
+                                                </TextBlock>
+                                                <DatePicker x:Name="DpDatePV" Style="{StaticResource ModernDatePicker}"/>
+                                                <Button Content="🚫 ترك فارغاً" Style="{StaticResource SmallButton}"
+                                                        Background="{StaticResource WarnBrush}"
+                                                        HorizontalAlignment="Left" Margin="0,4,0,0"
+                                                        Click="BtnClearDatePV_Click"/>
+                                            </StackPanel>
+
+                                            <StackPanel Margin="8,0,0,12">
+                                                <TextBlock Style="{StaticResource FieldLabel}"
+                                                           Text="📝 ملاحظة الشطر الأول"/>
+                                                <TextBox x:Name="TxtObs1" Style="{StaticResource ModernTextBox}"/>
+                                            </StackPanel>
+
+                                            <StackPanel Margin="0,0,8,0">
+                                                <TextBlock Style="{StaticResource FieldLabel}"
+                                                           Text="📝 ملاحظة الشطر الثاني"/>
+                                                <TextBox x:Name="TxtObs2" Style="{StaticResource ModernTextBox}"/>
+                                            </StackPanel>
+
+                                            <StackPanel Margin="4,0,4,0" Grid.ColumnSpan="2">
+                                                <TextBlock Style="{StaticResource FieldLabel}"
+                                                           Text="📝 ملاحظة تكميلية (Observation complémentaire)"/>
+                                                <TextBox x:Name="TxtObsComp" Style="{StaticResource ModernTextBox}"/>
+                                            </StackPanel>
+                                        </UniformGrid>
+                                    </StackPanel>
+                                </TabItem>
+                            </TabControl>
+                        </Border>
+
+                        <!-- زر التوليد -->
+                        <Border Background="#FFFFF8E7" BorderBrush="#FFF1C40F" BorderThickness="2"
+                                CornerRadius="14" Padding="16" Margin="0,0,0,16">
+                            <DockPanel>
+                                <Button Content="🔍 عرض حقول القالب (تشخيص)"
+                                        Style="{StaticResource SmallButton}"
+                                        Background="{StaticResource TextSecondaryBrush}"
+                                        DockPanel.Dock="Left"
+                                        Click="BtnShowFields_Click"
+                                        Margin="8,0,0,0"/>
+                                <TextBlock VerticalAlignment="Center" FontSize="12"
+                                           Foreground="#FF78350F">
+                                    <Run Text="📂 سيتم استخدام القالب الرسمي المضمّن داخل البرنامج: "/>
+                                    <Run FontWeight="Bold" x:Name="RunTemplateName"
+                                         Text="Annexe_05_Officiel.pdf"/>
+                                </TextBlock>
+                            </DockPanel>
+                        </Border>
+
+                        <Button x:Name="BtnGenerate"
+                                Style="{StaticResource SuccessButton}"
+                                Content="📥 توليد الملحق وحفظه في PDF"
+                                FontSize="15" Padding="22,14"
+                                HorizontalAlignment="Stretch"
+                                Click="BtnGenerate_Click"/>
+
+                        <!-- سجل العمليات -->
+                        <Expander Header="🔧 سجل العمليات (Debug)" Margin="0,16,0,0"
+                                  Foreground="{StaticResource PrimaryDarkBrush}"
+                                  FontWeight="Bold" FontSize="12">
+                            <Border Background="#FF0F172A" CornerRadius="10" Padding="14"
+                                    MaxHeight="240">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <ItemsControl x:Name="LogList">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding}"
+                                                           FontFamily="Consolas, Courier New"
+                                                           FontSize="11"
+                                                           Foreground="#FFB3FF9E"
+                                                           Margin="0,1"
+                                                           FlowDirection="LeftToRight"/>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </Border>
+                        </Expander>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+
+        <!-- Toast -->
+        <Border x:Name="Toast" Background="{StaticResource SuccessBrush}"
+                CornerRadius="22" Padding="24,10"
+                HorizontalAlignment="Center" VerticalAlignment="Top"
+                Margin="0,24,0,0" Visibility="Collapsed"
+                Effect="{DynamicResource ToastShadow}">
+            <TextBlock x:Name="TxtToast" Foreground="White" FontWeight="SemiBold" FontSize="13"/>
+        </Border>
+    </Grid>
+</Window>

@@ -1,0 +1,127 @@
+<Window x:Class="HabitatRural.Views.BeneficiairesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="👥 إدارة المستفيدين"
+        Height="620" Width="920"
+        MinHeight="500" MinWidth="720"
+        WindowStartupLocation="CenterOwner"
+        FlowDirection="RightToLeft"
+        FontFamily="{StaticResource UiFont}"
+        Background="{StaticResource BgBrush}">
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>   <!-- Header + Search -->
+            <RowDefinition Height="*"/>      <!-- DataGrid -->
+            <RowDefinition Height="Auto"/>   <!-- Actions -->
+        </Grid.RowDefinitions>
+
+        <!-- ── Header ── -->
+        <Border Grid.Row="0" Background="{StaticResource HeaderGradient}"
+                CornerRadius="14" Padding="18,12" Margin="0,0,0,12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <TextBlock Text="👥  قائمة المستفيدين"
+                               Foreground="White" FontSize="16" FontWeight="Bold"/>
+                    <TextBlock x:Name="TxtCount"
+                               Foreground="#FF90CAF9" FontSize="11" Margin="0,2,0,0"
+                               Text="جارٍ التحميل..."/>
+                </StackPanel>
+
+                <!-- بحث -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="🔍" FontSize="18" VerticalAlignment="Center"
+                               Margin="0,0,6,0" Foreground="White"/>
+                    <TextBox x:Name="TxtSearch"
+                             Width="260" Padding="10,6"
+                             FontSize="13" BorderThickness="0"
+                             Background="White" VerticalContentAlignment="Center"
+                             TextChanged="TxtSearch_TextChanged"
+                             ToolTip="ابحث بالاسم أو الكود أو آخر 5 أرقام">
+                        <TextBox.Template>
+                            <ControlTemplate TargetType="TextBox">
+                                <Border Background="White" CornerRadius="20"
+                                        Padding="{TemplateBinding Padding}">
+                                    <ScrollViewer x:Name="PART_ContentHost"/>
+                                </Border>
+                            </ControlTemplate>
+                        </TextBox.Template>
+                    </TextBox>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ── DataGrid ── -->
+        <Border Grid.Row="1" Background="White" CornerRadius="12"
+                BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                Margin="0,0,0,12">
+            <DataGrid x:Name="DgBeneficiaires"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      IsReadOnly="True"
+                      SelectionMode="Single"
+                      GridLinesVisibility="Horizontal"
+                      BorderThickness="0"
+                      RowHeaderWidth="0"
+                      Background="White"
+                      AlternatingRowBackground="#FFF8FAFC"
+                      HorizontalScrollBarVisibility="Disabled"
+                      MouseDoubleClick="Dg_DoubleClick">
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background"    Value="#FF0B2B44"/>
+                        <Setter Property="Foreground"    Value="White"/>
+                        <Setter Property="FontWeight"    Value="Bold"/>
+                        <Setter Property="FontSize"      Value="12"/>
+                        <Setter Property="Padding"       Value="10,8"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="الاسم واللقب"   Binding="{Binding NomPrenom}"  Width="*"   FontWeight="SemiBold"/>
+                    <DataGridTextColumn Header="الكود (Code)"  Binding="{Binding Code}"       Width="180" FontFamily="Courier New" FontSize="12"/>
+                    <DataGridTextColumn Header="آخر 5 أرقام"   Binding="{Binding Last5}"      Width="100" FontFamily="Courier New" FontSize="13" FontWeight="Bold"/>
+                    <DataGridTextColumn Header="العنوان/الفرقة" Binding="{Binding Adresse}"    Width="160"/>
+                    <DataGridTextColumn Header="رقم CCP"       Binding="{Binding NumeroCcp}"  Width="140"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+        <!-- ── Actions ── -->
+        <Border Grid.Row="2" Background="White" CornerRadius="12"
+                BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                Padding="14,10">
+            <DockPanel>
+                <!-- أزرار يسار -->
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                    <Button Content="✏️  تعديل"
+                            Style="{StaticResource SmallButton}"
+                            Background="{StaticResource AccentBrush}"
+                            Click="BtnEdit_Click" Margin="0,0,8,0"/>
+                    <Button Content="🗑  حذف"
+                            Style="{StaticResource SmallButton}"
+                            Background="{StaticResource DangerBrush}"
+                            Click="BtnDelete_Click" Margin="0,0,8,0"/>
+                </StackPanel>
+
+                <!-- زر الاختيار (يمين) -->
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                    <TextBlock Text="انقر نقراً مزدوجاً أو اختر ثم اضغط:"
+                               VerticalAlignment="Center" FontSize="11"
+                               Foreground="{StaticResource TextSecondaryBrush}"
+                               Margin="0,0,10,0"/>
+                    <Button Content="📂  تحميل المستفيد المحدد"
+                            Style="{StaticResource SmallButton}"
+                            Background="{StaticResource SuccessBrush}"
+                            Click="BtnSelect_Click" Padding="16,8"
+                            FontSize="13" FontWeight="Bold"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+    </Grid>
+</Window>

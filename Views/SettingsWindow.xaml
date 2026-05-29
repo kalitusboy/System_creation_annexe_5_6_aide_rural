@@ -1,0 +1,71 @@
+<Window x:Class="HabitatRural.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="⚙ الإعدادات العامة" Height="700" Width="720"
+        WindowStartupLocation="CenterOwner" FlowDirection="RightToLeft"
+        FontFamily="{StaticResource UiFont}" ResizeMode="CanResize"
+        MinHeight="600" MinWidth="650" Background="{StaticResource BgBrush}">
+    <Grid Margin="14">
+        <Border Style="{StaticResource MainCard}">
+            <Grid>
+                <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                <Border Grid.Row="0" Background="{StaticResource HeaderGradient}" CornerRadius="22,22,0,0" Padding="22,16">
+                    <DockPanel>
+                        <TextBlock Text="⚙" FontSize="26" VerticalAlignment="Center" Foreground="White" Margin="0,0,12,0"/>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="الإعدادات العامة" Foreground="White" FontSize="17" FontWeight="Bold"/>
+                            <TextBlock Text="تُحفظ مرة واحدة وتُستعمل في كل الملفات" Foreground="#FF90CAF9" FontSize="11" Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="22,18">
+                    <StackPanel>
+                        <Border Style="{StaticResource InfoBoxYellow}">
+                            <TextBlock TextWrapping="Wrap" FontSize="12"><Run Text="💡 "/>هذه الإعدادات تُحفظ في جهازك. يمكنك تعديل المبلغ الإجمالي للإعانة ونسب الأشطر حسب الحاجة.</TextBlock>
+                        </Border>
+                        <TextBlock Text="📍 معلومات الجهة الإدارية" Style="{StaticResource SectionTitle}" Margin="0,8,0,12"/>
+                        <UniformGrid Columns="3" Margin="0,0,0,18">
+                            <StackPanel Margin="0,0,8,0"><TextBlock Style="{StaticResource FieldLabel}" Text="🗺 الولاية (Wilaya)"/><TextBox x:Name="TxtWilaya" Style="{StaticResource ModernTextBox}"/></StackPanel>
+                            <StackPanel Margin="4,0,4,0"><TextBlock Style="{StaticResource FieldLabel}" Text="📍 الدائرة (Daira)"/><TextBox x:Name="TxtDaira" Style="{StaticResource ModernTextBox}"/></StackPanel>
+                            <StackPanel Margin="8,0,0,0"><TextBlock Style="{StaticResource FieldLabel}" Text="🏛 البلدية (Commune)"/><TextBox x:Name="TxtCommune" Style="{StaticResource ModernTextBox}"/></StackPanel>
+                        </UniformGrid>
+                        <TextBlock Text="💰 الإعانة المالية" Style="{StaticResource SectionTitle}"/>
+                        <Border Style="{StaticResource InfoBoxBlue}"><TextBlock TextWrapping="Wrap" FontSize="12"><Run Text="ℹ "/>يجب أن يكون مجموع نسبتي الشطر الأول والثاني مساوياً لـ 100%.</TextBlock></Border>
+                        <UniformGrid Columns="3" Margin="0,0,0,22">
+                            <StackPanel Margin="0,0,8,0"><TextBlock Style="{StaticResource FieldLabel}" Text="💵 المبلغ الإجمالي للإعانة (دج)"/><TextBox x:Name="TxtTotalAmount" Style="{StaticResource ModernTextBox}"/></StackPanel>
+                            <StackPanel Margin="4,0,4,0"><TextBlock Style="{StaticResource FieldLabel}" Text="📊 نسبة الشطر الأول (%)"/><TextBox x:Name="TxtPctT1" Style="{StaticResource ModernTextBox}"/></StackPanel>
+                            <StackPanel Margin="8,0,0,0"><TextBlock Style="{StaticResource FieldLabel}" Text="📊 نسبة الشطر الثاني (%)"/><TextBox x:Name="TxtPctT2" Style="{StaticResource ModernTextBox}"/></StackPanel>
+                        </UniformGrid>
+                        <DockPanel Margin="0,0,0,8">
+                            <TextBlock Text="👥 قائمة Subdivisionnaires المحتملين" Style="{StaticResource SectionTitle}" VerticalAlignment="Center"/>
+                            <Button Content="＋ إضافة اسم" Style="{StaticResource SmallButton}" Background="{StaticResource SuccessBrush}" HorizontalAlignment="Left" Click="BtnAddSubdiv_Click"/>
+                        </DockPanel>
+                        <Border Background="White" CornerRadius="12" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Padding="10" MinHeight="160" MaxHeight="220">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                <ItemsControl x:Name="SubdivList">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <DockPanel Margin="0,0,0,6">
+                                                <Button Content="🗑" Style="{StaticResource SmallButton}" Background="{StaticResource DangerBrush}"
+                                                        DockPanel.Dock="Left" Click="BtnRemoveSubdiv_Click" Tag="{Binding}" Margin="6,0,0,0" FontSize="13"/>
+                                                <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBox}"/>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+                <Border Grid.Row="2" Background="{StaticResource BgSoftBrush}" CornerRadius="0,0,22,22" Padding="22,14"
+                        BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,1,0,0">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Button Content="إلغاء" Style="{StaticResource BaseButton}" Background="{StaticResource TextSecondaryBrush}"
+                                Click="BtnCancel_Click" Margin="0,0,10,0"/>
+                        <Button Content="💾 حفظ الإعدادات" Style="{StaticResource SuccessButton}" Click="BtnSave_Click"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

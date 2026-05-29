@@ -1,0 +1,42 @@
+<Window x:Class="HabitatRural.Views.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ℹ حول البرنامج" Height="500" Width="520"
+        WindowStartupLocation="CenterOwner" FlowDirection="RightToLeft"
+        FontFamily="{StaticResource UiFont}" ResizeMode="NoResize"
+        Background="{StaticResource BgBrush}">
+    <Grid Margin="14">
+        <Border Style="{StaticResource MainCard}">
+            <Grid>
+                <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                <Border Grid.Row="0" Background="{StaticResource HeaderGradient}" CornerRadius="22,22,0,0" Padding="22,16">
+                    <DockPanel>
+                        <TextBlock Text="ℹ" FontSize="26" VerticalAlignment="Center" Foreground="White" Margin="0,0,12,0"/>
+                        <TextBlock Text="حول البرنامج" Foreground="White" FontSize="17" FontWeight="Bold" VerticalAlignment="Center"/>
+                    </DockPanel>
+                </Border>
+                <Border Grid.Row="1" Background="#FFF0F9FF" Margin="22" CornerRadius="14" Padding="24" BorderBrush="#FFBAE6FD" BorderThickness="1">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Text="📋" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,8"/>
+                        <TextBlock Text="نظام ملاحق المساعدة الريفية" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryDarkBrush}" HorizontalAlignment="Center" Margin="0,0,0,6"/>
+                        <TextBlock Text="C# WPF • الإصدار 3.0" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" HorizontalAlignment="Center" Margin="0,0,0,16"/>
+                        <TextBlock TextWrapping="Wrap" TextAlignment="Center" Foreground="{StaticResource LabelBrush}" FontSize="12" Margin="0,0,0,16">
+                            <Run Text="الغرض: تعبئة آلية للملحقين 05 و 06 الخاصين بالمساعدة الريفية، "/>
+                            <Run Text="بحقن البيانات مباشرة في القوالب الرسمية للحصول على ملفات PDF "/>
+                            <Run Text="بالتنسيق الرسمي تماماً."/>
+                        </TextBlock>
+                        <Border Background="White" CornerRadius="10" Padding="14" BorderBrush="#FFBAE6FD" BorderThickness="1">
+                            <StackPanel HorizontalAlignment="Center">
+                                <TextBlock Text="👨‍💻 تم التطوير من طرف:" HorizontalAlignment="Center" Foreground="{StaticResource LabelBrush}" FontSize="12" Margin="0,0,0,6"/>
+                                <TextBlock Text="حميتي نسيم الحوضان" FontSize="15" FontWeight="Bold" Foreground="{StaticResource PrimaryDarkBrush}" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Row="2" Background="{StaticResource BgSoftBrush}" CornerRadius="0,0,22,22" Padding="22,12">
+                    <Button Content="حسناً" Style="{StaticResource SuccessButton}" HorizontalAlignment="Center" Padding="36,8" Click="BtnOk_Click"/>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

@@ -15,14 +15,7 @@ namespace HabitatRural.Views
         }
         private void Print_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                WebBrowser.Print();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("خطأ في الطباعة: " + ex.Message);
-            }
+            MessageBox.Show("يمكنك حفظ الملف وطباعته من قارئ PDF.", "طباعة");
         }
         private void Close_Click(object sender, RoutedEventArgs e) => Close();
     }

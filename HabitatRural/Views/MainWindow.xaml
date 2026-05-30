@@ -1,0 +1,87 @@
+<Window x:Class="HabitatRural.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="نظام تحرير ملاحق السكن الريفي - Annexe 5 et 6"
+        Height="750" Width="850"
+        MinHeight="600" MinWidth="700"
+        WindowStartupLocation="CenterScreen"
+        Background="White"
+        FlowDirection="RightToLeft"
+        FontFamily="Segoe UI"
+        ResizeMode="CanResize">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="نظام تحرير ملاحق السكن الريفي" 
+                   FontSize="24" FontWeight="Bold" 
+                   Foreground="#2C3E50" Margin="0,0,0,5"
+                   HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="1" Text="Annexe 5 et 6" 
+                   FontSize="14" Foreground="#7F8C8D" 
+                   HorizontalAlignment="Center" Margin="0,0,0,25"/>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,25">
+            <Button x:Name="BtnAnnexe5" Content="📄 Annexe 5" Width="180" Height="45" Margin="0,0,15,0"
+                    FontSize="16" FontWeight="Bold" Background="#2196F3" Foreground="White"
+                    BorderThickness="0" Cursor="Hand" Click="AnnexeType_Click"/>
+            <Button x:Name="BtnAnnexe6" Content="📑 Annexe 6" Width="180" Height="45"
+                    FontSize="16" FontWeight="Bold" Background="#E0E0E0" Foreground="#333"
+                    BorderThickness="0" Cursor="Hand" Click="AnnexeType_Click"/>
+        </StackPanel>
+
+        <Border Grid.Row="3" BorderBrush="#DDDDDD" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,20">
+            <StackPanel>
+                <TextBlock Text="رقم المقرر (17 رقم) - Code bénéficiaire" FontWeight="Bold" Margin="0,0,0,5"/>
+                <TextBox x:Name="TxtCode" Height="35" Margin="0,0,0,12" BorderBrush="#CCCCCC" BorderThickness="1" Padding="8" TextChanged="TxtCode_TextChanged"/>
+                <TextBlock Text="الاسم واللقب - Nom et prénom" FontWeight="Bold" Margin="0,0,0,5"/>
+                <TextBox x:Name="TxtNomPrenom" Height="35" Margin="0,0,0,12" BorderBrush="#CCCCCC" BorderThickness="1" Padding="8"/>
+                <TextBlock Text="العنوان - Adresse" FontWeight="Bold" Margin="0,0,0,5"/>
+                <TextBox x:Name="TxtAdresse" Height="35" Margin="0,0,0,12" BorderBrush="#CCCCCC" BorderThickness="1" Padding="8"/>
+                <TextBlock Text="رقم CCP / حساب بنكي" FontWeight="Bold" Margin="0,0,0,5"/>
+                <TextBox x:Name="TxtCcp" Height="35" Margin="0,0,0,12" BorderBrush="#CCCCCC" BorderThickness="1" Padding="8"/>
+                <TextBlock Text="تاريخ القرار - Date décision" FontWeight="Bold" Margin="0,0,0,5"/>
+                <DatePicker x:Name="DpDateDecision" Height="35" BorderBrush="#CCCCCC" BorderThickness="1"/>
+            </StackPanel>
+        </Border>
+
+        <Border x:Name="Annexe6Panel" Grid.Row="4" BorderBrush="#DDDDDD" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,20" Visibility="Collapsed">
+            <StackPanel>
+                <TextBlock Text="رقم رخصة البناء - Numéro permis" FontWeight="Bold" Margin="0,0,0,5"/>
+                <TextBox x:Name="TxtPermisNum" Height="35" Margin="0,0,0,12" BorderBrush="#CCCCCC" BorderThickness="1" Padding="8"/>
+                <TextBlock Text="تاريخ رخصة البناء - Date permis" FontWeight="Bold" Margin="0,0,0,5"/>
+                <DatePicker x:Name="DpDatePermis" Height="35" BorderBrush="#CCCCCC" BorderThickness="1"/>
+            </StackPanel>
+        </Border>
+
+        <WrapPanel Grid.Row="5" Margin="0,10,0,20" HorizontalAlignment="Center">
+            <Button x:Name="BtnSearch" Content="🔍 بحث بخمسة أرقام" Width="150" Height="40" Margin="0,0,10,0"
+                    Background="#607D8B" Foreground="White" BorderThickness="0" Click="BtnSearch_Click"/>
+            <Button x:Name="BtnPreview" Content="👁️ معاينة PDF" Width="150" Height="40" Margin="0,0,10,0"
+                    Background="#FF9800" Foreground="White" BorderThickness="0" Click="BtnPreview_Click"/>
+            <Button x:Name="BtnGenerate" Content="📥 توليد وحفظ PDF" Width="150" Height="40"
+                    Background="#4CAF50" Foreground="White" BorderThickness="0" Click="BtnGenerate_Click"/>
+        </WrapPanel>
+
+        <Expander Grid.Row="6" Header="🔧 سجل العمليات" Foreground="#555" FontSize="12">
+            <Border Background="#F5F5F5" CornerRadius="4" Padding="8">
+                <ScrollViewer Height="120">
+                    <ItemsControl x:Name="LogList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" FontFamily="Consolas" FontSize="10" Margin="0,1"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Border>
+        </Expander>
+    </Grid>
+</Window>

@@ -98,7 +98,7 @@ namespace HabitatRural.Services
         private void SetAllByName(PdfAcroForm form, string name, string value)
         {
             int count = 0;
-            for (int i = 0; i < form.Fields.Count; i++)
+            for (int i = 0; i < form.Fields.Count(); i++)
             {
                 var f = form.Fields[i];
                 if (f != null && f.Name == name)
@@ -135,7 +135,7 @@ namespace HabitatRural.Services
             var form = doc.AcroForm;
             if (form == null) return new List<string>();
             var names = new List<string>();
-            for (int i = 0; i < form.Fields.Count; i++)
+            for (int i = 0; i < form.Fields.Count(); i++)
             {
                 var f = form.Fields[i];
                 if (f != null) names.Add(f.Name);

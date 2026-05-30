@@ -1,5 +1,3 @@
-using System.Windows.Controls;
-using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -35,7 +33,7 @@ namespace HabitatRural.Views {
                 MessageBox.Show("البيانات غير صحيحة. يجب أن يكون مجموع النسب 100%.", "خطأ");
                 return;
             }
-            var names = _subdivs.Select(x => x.Value?.Trim()).Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+            var names = _subdivs.Select(x => x.Value?.Trim()).Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => x ?? "").ToList();
             if (names.Count == 0) names.Add("AMRANI AHMED");
             var s = new AppSettings {
                 Wilaya = TxtWilaya.Text.Trim(),

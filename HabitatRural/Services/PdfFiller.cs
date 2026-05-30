@@ -7,12 +7,16 @@ using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.AcroForms;
 using PdfSharpCore.Pdf.IO;
 
-namespace HabitatRural.Services {
-    public class PdfFiller {
+namespace HabitatRural.Services
+{
+    public class PdfFiller
+    {
         public List<string> Logs { get; } = new();
         public void Log(string msg, bool error = false) => Logs.Add((error ? "❌ " : "✅ ") + msg);
         public void Clear() => Logs.Clear();
-        public byte[] FillAnnexe05(string templatePath, AppSettings settings, AnnexeRequest req, AnnexeLogic logic) {
+
+        public byte[] FillAnnexe05(string templatePath, AppSettings settings, AnnexeRequest req, AnnexeLogic logic)
+        {
             using var doc = PdfReader.Open(templatePath, PdfDocumentOpenMode.Modify);
             var form = doc.AcroForm;
             if (form == null) throw new InvalidOperationException("القالب لا يحتوي على حقول AcroForm.");
@@ -34,7 +38,9 @@ namespace HabitatRural.Services {
             doc.Save(ms);
             return ms.ToArray();
         }
-        public byte[] FillAnnexe06(string templatePath, AppSettings settings, AnnexeRequest req, AnnexeLogic logic) {
+
+        public byte[] FillAnnexe06(string templatePath, AppSettings settings, AnnexeRequest req, AnnexeLogic logic)
+        {
             using var doc = PdfReader.Open(templatePath, PdfDocumentOpenMode.Modify);
             var form = doc.AcroForm;
             if (form == null) throw new InvalidOperationException("القالب لا يحتوي على حقول AcroForm.");
@@ -67,51 +73,70 @@ namespace HabitatRural.Services {
             doc.Save(ms);
             return ms.ToArray();
         }
-        private static void EnsureNeedAppearances(PdfDocument doc) {
+
+        private static void EnsureNeedAppearances(PdfDocument doc)
+        {
             if (doc.AcroForm.Elements.ContainsKey("/NeedAppearances"))
                 doc.AcroForm.Elements["/NeedAppearances"] = new PdfBoolean(true);
             else
                 doc.AcroForm.Elements.Add("/NeedAppearances", new PdfBoolean(true));
         }
-        private void SetText(PdfAcroForm form, string name, string value) {
+
+        private void SetText(PdfAcroForm form, string name, string value)
+        {
             var field = form.Fields[name];
             if (field == null) { Log($"حقل غير موجود: {name}", true); return; }
-            try {
+            try
+            {
                 if (field is PdfTextField tf) tf.Value = new PdfString(value);
                 else field.Elements.SetString("/V", value);
                 Log($"{name} = {value}");
-            } catch (Exception ex) { Log($"{name}: {ex.Message}", true); }
+            }
+            catch (Exception ex) { Log($"{name}: {ex.Message}", true); }
         }
-        private void SetAllByName(PdfAcroForm form, string name, string value) {
+
+        private void SetAllByName(PdfAcroForm form, string name, string value)
+        {
             int count = 0;
-            for (int i = 0; i < form.Fields.Count; i++) {
+            for (int i = 0; i < form.Fields.Count; i++)
+            {
                 var f = form.Fields[i];
-                if (f != null && f.Name == name) {
-                    try {
+                if (f != null && f.Name == name)
+                {
+                    try
+                    {
                         if (f is PdfTextField tf) tf.Value = new PdfString(value);
                         else f.Elements.SetString("/V", value);
                         count++;
-                    } catch { }
+                    }
+                    catch { }
                 }
             }
             if (count > 0) Log($"{count}× \"{name}\" = {value}");
             else Log($"حقل غير موجود: {name}", true);
         }
-        private void SetCheckBox(PdfAcroForm form, string name, bool isChecked) {
+
+        private void SetCheckBox(PdfAcroForm form, string name, bool isChecked)
+        {
             var field = form.Fields[name];
             if (field == null) { Log($"حقل غير موجود: {name}", true); return; }
-            try {
+            try
+            {
                 if (field is PdfCheckBoxField cb) cb.Checked = isChecked;
                 else field.Elements.SetName("/V", isChecked ? "/Yes" : "/Off");
                 Log($"☑ {name} = {isChecked}");
-            } catch (Exception ex) { Log($"{name}: {ex.Message}", true); }
+            }
+            catch (Exception ex) { Log($"{name}: {ex.Message}", true); }
         }
-        public static List<string> ListFields(string templatePath) {
+
+        public static List<string> ListFields(string templatePath)
+        {
             using var doc = PdfReader.Open(templatePath, PdfDocumentOpenMode.ReadOnly);
             var form = doc.AcroForm;
             if (form == null) return new List<string>();
             var names = new List<string>();
-            for (int i = 0; i < form.Fields.Count; i++) {
+            for (int i = 0; i < form.Fields.Count; i++)
+            {
                 var f = form.Fields[i];
                 if (f != null) names.Add(f.Name);
             }

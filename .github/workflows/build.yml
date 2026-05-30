@@ -2,9 +2,9 @@ name: Build WPF Application
 
 on:
   push:
-    branches: [ main ]
+    branches: [ version_deepseek_after_claude ]
   pull_request:
-    branches: [ main ]
+    branches: [ version_deepseek_after_claude ]
 
 jobs:
   build:

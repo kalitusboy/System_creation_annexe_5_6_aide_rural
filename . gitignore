@@ -1,0 +1,46 @@
+# Build outputs
+bin/
+obj/
+*.exe
+*.dll
+*.pdb
+*.cache
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# VS Code
+.vscode/
+
+# Rider
+.idea/
+
+# Published output
+publish/
+*.nupkg
+
+# SQLite databases (اختياري – إذا أردت استبعاد قاعدة البيانات المحلية)
+*.db
+*.db-shm
+*.db-wal
+
+# Archive folder (الملفات التي أنشأها البرنامج)
+HabitatRural_Archives/
+
+# Temp files
+*.tmp
+*.temp
+
+# Logs
+*.log
+
+# PDF templates? لا تستبعد – لكن المستخدم سيضيفها يدوياً
+# Assets/Templates/*.pdf
+
+# Windows image cache
+Thumbs.db
+ehthumbs.db
+Desktop.ini

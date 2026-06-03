@@ -8,7 +8,7 @@ on:
     branches: [ new_claude ]
 
 permissions:
-  contents: write   # لرفع الـ Release
+  contents: write   # required for creating releases
 
 jobs:
   # ══════════════════════════════════════════════
@@ -19,32 +19,29 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      # ── استنساخ الكود ──────────────────────────
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # ── إعداد .NET 8 ───────────────────────────
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
 
-      # ── استعادة الحزم (NuGet) ──────────────────
+      # (Optional) List files to verify structure
+      - name: List files
+        shell: pwsh
+        run: |
+          Get-ChildItem -Recurse -Depth 2 | Select-Object FullName
+
       - name: Restore NuGet packages
-        run: dotnet restore HabitatRural/HabitatRural.csproj
+        run: dotnet restore HabitatRural.csproj
 
-      # ── البناء ─────────────────────────────────
       - name: Build (Release)
-        run: >
-          dotnet build HabitatRural/HabitatRural.csproj
-          --configuration Release
-          --no-restore
-          -p:Platform="Any CPU"
+        run: dotnet build HabitatRural.csproj --configuration Release --no-restore -p:Platform="Any CPU"
 
-      # ── نشر ملف تنفيذي واحد مستقل ─────────────
       - name: Publish self-contained single-file
         run: >
-          dotnet publish HabitatRural/HabitatRural.csproj
+          dotnet publish HabitatRural.csproj
           --configuration Release
           --runtime win-x64
           --self-contained true
@@ -54,11 +51,10 @@ jobs:
           -p:Platform="Any CPU"
           --output publish/
 
-      # ── نسخ القوالب إلى مجلد النشر ────────────
       - name: Copy PDF templates
         shell: pwsh
         run: |
-          $src  = "HabitatRural/Assets/Templates"
+          $src  = "Assets/Templates"
           $dest = "publish/Assets/Templates"
           if (Test-Path $src) {
             New-Item -ItemType Directory -Force -Path $dest | Out-Null
@@ -68,7 +64,6 @@ jobs:
             Write-Warning "Templates folder not found — skipping."
           }
 
-      # ── ضغط الإصدار ────────────────────────────
       - name: Create release archive
         shell: pwsh
         run: |
@@ -79,7 +74,6 @@ jobs:
           Write-Host "Created: $zipName"
           echo "ZIP_NAME=$zipName" >> $env:GITHUB_ENV
 
-      # ── رفع Artifact للتحميل المباشر من CI ────
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
@@ -107,8 +101,8 @@ jobs:
 
       - name: Restore & Publish
         run: |
-          dotnet restore HabitatRural/HabitatRural.csproj
-          dotnet publish HabitatRural/HabitatRural.csproj `
+          dotnet restore HabitatRural.csproj
+          dotnet publish HabitatRural.csproj `
             --configuration Release `
             --runtime win-x64 `
             --self-contained true `
@@ -121,7 +115,7 @@ jobs:
       - name: Copy templates
         shell: pwsh
         run: |
-          $src  = "HabitatRural/Assets/Templates"
+          $src  = "Assets/Templates"
           $dest = "publish/Assets/Templates"
           if (Test-Path $src) {
             New-Item -ItemType Directory -Force -Path $dest | Out-Null
@@ -154,13 +148,6 @@ jobs:
             ### متطلبات النظام
             - Windows 10 / 11 (64-bit)
             - لا توجد متطلبات إضافية (self-contained)
-
-            ### ما الجديد
-            - واجهة مُبسَّطة بخلفية بيضاء
-            - قاعدة بيانات SQLite حقيقية
-            - بحث بـ 5 أرقام من الكود
-            - أرشفة تلقائية للملاحق المُولَّدة
-            - معاينة PDF مباشرة بعد الإنشاء
           files: ${{ env.ZIP_NAME }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

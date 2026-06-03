@@ -2,10 +2,10 @@ name: Build & Release HabitatRural
 
 on:
   push:
-    branches: [ claude_new_version ]
+    branches: [ new_claude ]
     tags:     [ 'v*.*.*' ]
   pull_request:
-    branches: [ claude_new_version ]
+    branches: [ new_claude ]
 
 permissions:
   contents: write   # لرفع الـ Release

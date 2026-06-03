@@ -78,7 +78,8 @@
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="20" Padding="{TemplateBinding Padding}"
+                            CornerRadius="20" 
+                            Padding="{TemplateBinding Padding}"
                             SnapsToDevicePixels="True">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
                                           TextElement.Foreground="{TemplateBinding Foreground}"/>
@@ -134,12 +135,10 @@
         <Setter Property="FontSize"    Value="12"/>
     </Style>
 
-    <!-- Petit bouton -->
+    <!-- Petit bouton - لا يمكن تعيين CornerRadius مباشرة، تم إزالته -->
     <Style x:Key="SmallButton" TargetType="Button" BasedOn="{StaticResource BaseButton}">
         <Setter Property="Padding"   Value="10,5"/>
         <Setter Property="FontSize"  Value="11"/>
-        <Setter Property="CornerRadius" Value="8"/>
-        <!-- CornerRadius ignoré sur BaseButton template - ok via Bd.CornerRadius -->
     </Style>
 
     <!-- ════════ Grand bouton sélecteur (Annexe / Type bâtiment) ════════ -->

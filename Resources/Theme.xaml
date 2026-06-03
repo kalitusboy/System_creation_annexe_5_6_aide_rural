@@ -1,0 +1,41 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ═══════════════ Palette propre — blanc + bleu ═══════════════ -->
+
+    <!-- Bleu principal -->
+    <SolidColorBrush x:Key="AccentBrush"        Color="#FF2563EB"/>
+    <SolidColorBrush x:Key="AccentHoverBrush"   Color="#FF1D4ED8"/>
+    <SolidColorBrush x:Key="AccentLightBrush"   Color="#FFEFF6FF"/>
+
+    <!-- Fond blanc -->
+    <SolidColorBrush x:Key="BgBrush"            Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="BgSoftBrush"        Color="#FFF9FAFB"/>
+    <SolidColorBrush x:Key="CardBrush"          Color="#FFFFFFFF"/>
+
+    <!-- Bordures & textes -->
+    <SolidColorBrush x:Key="BorderBrush"        Color="#FFE5E7EB"/>
+    <SolidColorBrush x:Key="TextBrush"          Color="#FF111827"/>
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#FF6B7280"/>
+    <SolidColorBrush x:Key="LabelBrush"         Color="#FF374151"/>
+
+    <!-- Gris pour boutons secondaires -->
+    <SolidColorBrush x:Key="GrayBrush"          Color="#FF6B7280"/>
+    <SolidColorBrush x:Key="GrayLightBrush"     Color="#FFF3F4F6"/>
+
+    <!-- Statuts (gardés pour les toasts) -->
+    <SolidColorBrush x:Key="SuccessBrush"       Color="#FF16A34A"/>
+    <SolidColorBrush x:Key="WarnBrush"          Color="#FFD97706"/>
+    <SolidColorBrush x:Key="DangerBrush"        Color="#FFDC2626"/>
+
+    <!-- Alias legacy (référencés dans le code-behind) -->
+    <SolidColorBrush x:Key="PrimaryDarkBrush"   Color="#FF1E3A8A"/>
+    <SolidColorBrush x:Key="PrimaryBrush"       Color="#FF2563EB"/>
+    <SolidColorBrush x:Key="PrimaryLightBrush"  Color="#FF3B82F6"/>
+    <SolidColorBrush x:Key="InfoBrush"          Color="#FF2563EB"/>
+    <SolidColorBrush x:Key="AccentLBrush"       Color="#FFEFF6FF"/>
+
+    <!-- Police -->
+    <FontFamily x:Key="UiFont">Segoe UI, Tahoma, Geneva, Arial</FontFamily>
+
+</ResourceDictionary>

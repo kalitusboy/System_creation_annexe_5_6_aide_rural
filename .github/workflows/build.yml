@@ -1,0 +1,166 @@
+name: Build & Release HabitatRural
+
+on:
+  push:
+    branches: [ claude_new_version ]
+    tags:     [ 'v*.*.*' ]
+  pull_request:
+    branches: [ claude_new_version ]
+
+permissions:
+  contents: write   # لرفع الـ Release
+
+jobs:
+  # ══════════════════════════════════════════════
+  # 1. البناء والنشر
+  # ══════════════════════════════════════════════
+  build:
+    name: Build (Windows / .NET 8)
+    runs-on: windows-latest
+
+    steps:
+      # ── استنساخ الكود ──────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── إعداد .NET 8 ───────────────────────────
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      # ── استعادة الحزم (NuGet) ──────────────────
+      - name: Restore NuGet packages
+        run: dotnet restore HabitatRural/HabitatRural.csproj
+
+      # ── البناء ─────────────────────────────────
+      - name: Build (Release)
+        run: >
+          dotnet build HabitatRural/HabitatRural.csproj
+          --configuration Release
+          --no-restore
+          -p:Platform="Any CPU"
+
+      # ── نشر ملف تنفيذي واحد مستقل ─────────────
+      - name: Publish self-contained single-file
+        run: >
+          dotnet publish HabitatRural/HabitatRural.csproj
+          --configuration Release
+          --runtime win-x64
+          --self-contained true
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:EnableCompressionInSingleFile=true
+          -p:Platform="Any CPU"
+          --output publish/
+
+      # ── نسخ القوالب إلى مجلد النشر ────────────
+      - name: Copy PDF templates
+        shell: pwsh
+        run: |
+          $src  = "HabitatRural/Assets/Templates"
+          $dest = "publish/Assets/Templates"
+          if (Test-Path $src) {
+            New-Item -ItemType Directory -Force -Path $dest | Out-Null
+            Copy-Item "$src/*" $dest -Recurse -Force
+            Write-Host "Templates copied."
+          } else {
+            Write-Warning "Templates folder not found — skipping."
+          }
+
+      # ── ضغط الإصدار ────────────────────────────
+      - name: Create release archive
+        shell: pwsh
+        run: |
+          $version = "${{ github.ref_name }}"
+          if ($version -notmatch '^v') { $version = "dev-${{ github.run_number }}" }
+          $zipName = "HabitatRural_${version}_win-x64.zip"
+          Compress-Archive -Path publish/* -DestinationPath $zipName -Force
+          Write-Host "Created: $zipName"
+          echo "ZIP_NAME=$zipName" >> $env:GITHUB_ENV
+
+      # ── رفع Artifact للتحميل المباشر من CI ────
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: HabitatRural-${{ github.run_number }}
+          path: ${{ env.ZIP_NAME }}
+          retention-days: 30
+
+  # ══════════════════════════════════════════════
+  # 2. إنشاء Release عند push tag (v*.*.*)
+  # ══════════════════════════════════════════════
+  release:
+    name: Create GitHub Release
+    runs-on: windows-latest
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore & Publish
+        run: |
+          dotnet restore HabitatRural/HabitatRural.csproj
+          dotnet publish HabitatRural/HabitatRural.csproj `
+            --configuration Release `
+            --runtime win-x64 `
+            --self-contained true `
+            -p:PublishSingleFile=true `
+            -p:IncludeNativeLibrariesForSelfExtract=true `
+            -p:EnableCompressionInSingleFile=true `
+            -p:Platform="Any CPU" `
+            --output publish/
+
+      - name: Copy templates
+        shell: pwsh
+        run: |
+          $src  = "HabitatRural/Assets/Templates"
+          $dest = "publish/Assets/Templates"
+          if (Test-Path $src) {
+            New-Item -ItemType Directory -Force -Path $dest | Out-Null
+            Copy-Item "$src/*" $dest -Recurse -Force
+          }
+
+      - name: Package release
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          Compress-Archive -Path publish/* `
+            -DestinationPath "HabitatRural_${tag}_win-x64.zip" -Force
+          echo "ZIP_NAME=HabitatRural_${tag}_win-x64.zip" >> $env:GITHUB_ENV
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name:   ${{ github.ref_name }}
+          name:       "HabitatRural ${{ github.ref_name }}"
+          draft:      false
+          prerelease: false
+          body: |
+            ## 🏠 نظام تحرير ملاحق السكن الريفي — ${{ github.ref_name }}
+
+            ### التثبيت
+            1. نزّل الملف **HabitatRural_${{ github.ref_name }}_win-x64.zip**
+            2. فكّ الضغط في أي مجلد
+            3. شغّل **HabitatRural.exe** مباشرة — لا يحتاج تثبيت .NET منفصل
+
+            ### متطلبات النظام
+            - Windows 10 / 11 (64-bit)
+            - لا توجد متطلبات إضافية (self-contained)
+
+            ### ما الجديد
+            - واجهة مُبسَّطة بخلفية بيضاء
+            - قاعدة بيانات SQLite حقيقية
+            - بحث بـ 5 أرقام من الكود
+            - أرشفة تلقائية للملاحق المُولَّدة
+            - معاينة PDF مباشرة بعد الإنشاء
+          files: ${{ env.ZIP_NAME }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
